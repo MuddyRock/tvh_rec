@@ -131,7 +131,7 @@ else:
       return ICON
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
       """Return the state attributes."""
       attr = {
            ATTR_ATTRIBUTION: CONF_ATTRIBUTION,
@@ -146,11 +146,13 @@ else:
           'line2_default': '$studio $release',
           'line3_default': '$runtime $date $time',
           'line4_default': '$number',
-          'icon': 'mdi:arrow-down-bold'
+          'icon': 'mdi:arrow-down-bold',
+          'recordings': []
         }
       ]
 
       if 'ent' in _data.keys():
+        recordings = []
         for d in _data.pop('ent'):
           card_item = {}
           card_item['airdate'] = d['start']
@@ -168,7 +170,9 @@ else:
             card_item['fanart'] = d['channel_icon']
             card_item['poster'] = d['image']
 
-          card_json.append(card_item)
+          recordings.append(card_item)
+
+        card_json[0]['recordings'] = recordings
 
       attr.update(_data)
       attr['data'] = j.dumps(card_json)
